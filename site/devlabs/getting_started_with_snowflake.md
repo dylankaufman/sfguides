@@ -265,7 +265,7 @@ Schema Name: `PUBLIC`
 URL: `s3://snowflake-workshop-lab/citibike-trips`
 
 Positive
-: The S3 bucket for this lab is public so you can leave the key fields empty. Such buckets will likely require key information in the future.
+: The S3 bucket for this lab is public so you can leave the key fields empty. In the future, you may use S3 buckets and other cloud sources that are not public and they will usually require key information.
 
 ![create stage settings](assets/4PreLoad_12.png)
 
@@ -291,10 +291,12 @@ From the Databases tab, click on the `CITIBIKE` database hyperlink. Select File 
 
 On the resulting page we create a file format. In the box that appears, leave all the default settings as-is but make the changes below:
 
-Name: `CSV`
-Field optionally enclosed by: Double Quote
-Null string: <Delete the existing text in this field so it is empty>
-[ ] Error on Column Count Mismatch: <uncheck this box>
+DK: NOTE: having these all show up on one line, which is how it was being rendered even though they appeared on separate lines here, and with the angle brackets hiding the delete & uncheck instructions, made this one hard to figure out. It was fine for the worksheet context entries, but not so good here. I wasn't sure how to get those to render as separate lines, other than to use a list, but now I can't get the list to show a bullet for the checkbox item...
+
+* Name: `CSV`
+* Field optionally enclosed by: Double Quote 
+* Null string: --Delete the existing text in this field so it is empty--
+*  [ ] Error on Column Count Mismatch: --uncheck this box--
 
 If you do not see the “Error on Column Count Mismatch” box, scroll down in the dialogue box.
 
@@ -331,7 +333,7 @@ Positive
 
 - The Size drop-down is where the capacity of the warehouse is selected. For larger data loading operations or more compute-intensive queries, a larger warehouse is needed. The sizes translate to underlying compute nodes, either AWS EC2 or Azure Virtual Machines. The larger the size, the more compute resources from the cloud provider are allocated to that warehouse. As an example, the 4-XL option allocates 128 nodes. This sizing can be changed up or down at any time with a simple click.
 
-- If you have Snowflake’s Enterprise Edition or higher you will see the Maximum Clusters section. This is where you can set up a single warehouse to be multi-cluster up to 10 clusters. As an example, if a 4-XL warehouse was assigned a maximum cluster size of 10, it could scale up to be 1280 (128 \* 10) AWS EC2 or Azure VM nodes powering that warehouse...and it can do this in seconds! Multi-cluster is ideal for concurrency scenarios, such as many business analysts simultaneously running different queries using the same warehouse. In this use case, the various queries can be allocated across multiple clusters to ensure they run quickly.
+- If you have Snowflake’s Enterprise Edition or higher you will see the Maximum Clusters section. This is where you can set up a single warehouse to be multi-cluster up to 10 clusters. As an example, if a 4-XL warehouse was assigned a maximum cluster size of 10, it could scale up to be 1280 (128 \* 10) AWS EC2 or Azure VM nodes powering that warehouse... and it can do this in seconds! Multi-cluster is ideal for concurrency scenarios, such as many business analysts simultaneously running different queries using the same warehouse. In this use case, the various queries can be allocated across multiple clusters to ensure they run quickly.
 
 - The final sections allow you to automatically suspend the warehouse so it stops itself when not in use and no credits are needlessly consumed. There is also an option to automatically resume a suspended warehouse so when a new workload is assigned to it, it will automatically start back up. This functionality enables Snowflake’s efficient “pay only for what you use” billing model which allows customers to scale their resources when necessary and automatically scale down or turn off what is not needed, nearly eliminating idle resources.
 
@@ -507,7 +509,7 @@ Run the following command in the worksheet to create a development (dev) table:
 create table trips_dev clone trips
 ```
 
-If closed, expand the database objects browser on the left of the worksheet. Click the small Refresh button in the left-hand panel and expand the object tree under the CITIBIKE database. Verify that you can see a new table under the CITIBIKE database named TRIPS_DEV. The development team now can do whatever they want with this table, including delete it, without impacting the TRIPS table or any other object.
+If closed, expand the database objects browser on the left of the worksheet. Click the small Refresh button in the left-hand panel and expand the object tree under the CITIBIKE database. Verify that you can see a new table under the CITIBIKE database named TRIPS_DEV. The development team now can do whatever they want with this table, including changing or deleting it, without impacting the TRIPS table or any other object.
 
 ![trips_dev table](assets/6Query_5.png)
 
@@ -595,7 +597,7 @@ For this section, we will use a warehouse to load the data from the S3 bucket in
 
 Via the worksheet, run a `COPY` command to load the data into the `JSON_WEATHER_DATA` table we created earlier.
 
-Note how in the SQL command we can specify a `FILE FORMAT` object inline. In the previous section where we loaded structured data, we had to define a file format in detail. Because the JSON data here is well formatted, we are able to use default settings and simply specify the JSON type.
+Note how in the SQL command we can specify a `FILE FORMAT` object inline. In the previous section where we loaded structured data, we defined a file format in detail; many or most of those formatting options can be included inline as well, but it is often good to create a file format to reuse those definitions. Because the JSON data here is well formatted, we will use default settings and simply specify the JSON type.
 
 ```SQL
 copy into json_weather_data
@@ -712,7 +714,7 @@ From the worksheet, run the following DROP command to remove the json_weather_da
 drop table json_weather_data;
 ```
 
-Run a SELECT statement on the json_weather_data table. In the Results pane you should see an error because the underlying table has been dropped.
+Run a SELECT statement on the json_weather_data table. In the Results pane you should see an error because the underlying table has been dropped. Querying the view will get a similar error.
 
 ```SQL
 select * from json_weather_data limit 10;
@@ -874,7 +876,7 @@ In the top right corner of the UI, click on your username to show the User Prefe
 
 Negative
 : **Roles in User Preference vs Worksheet**
-We just changed the security role for the session in the user preference menu. This is different from the worksheet context menu where we assign a role that is applied to that specific worksheet. Also, the session security role can simultaneously be different from the role used in a worksheet.
+We just changed the security role for the session in the user preference menu. This is different from the worksheet context menu where we assign a role that is applied to that specific worksheet. Also, the session security role can simultaneously be different from the role used in a worksheet (and the role can be different in each worksheet).
 
 Notice at the top of the UI you will now see a sixth tab called Account that you can only view in the `ACCOUNTADMIN` role.
 
