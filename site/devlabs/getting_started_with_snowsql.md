@@ -95,7 +95,7 @@ the needed objects for cloud storage.
 snowsql -a <account-name> -u <username>
 ```
 
-The `-a` flag represents the Snowflake account, and the `-u` represents the username.
+The `-a` flag represents the Snowflake account, and the `-u` represents the username. Note that the account name can be found in the Organization tab, using either the account locator (for AWS installations) or the portion of the account locator URL or account URL between `https://` and `.snowflakecomputing.com` (for Azure & GCP).
 
 ### Create a Database and Schema
 
