@@ -247,7 +247,7 @@ This query returns a list of employees by the `first_name` of ‘Ron’ from the
 select email from emp_basic where email like '%.au';
 ```
 
-The like function checks all emails in the `emp_basic` table for `au` and returns a record.
+The like function checks all emails in the `emp_basic` table and returns those that end in `.au`.
 
 ![Snowflake_SELECTEmailAU_image](assets/Snowflake_SELECTEmailAU.png)
 
@@ -273,16 +273,16 @@ insert into emp_basic values
   ('Clementine','Adamou','cadamou@sf_tuts.com','10510 Sachs Road','Klenak','2017-9-22') ,
   ('Marlowe','De Anesy','madamouc@sf_tuts.co.uk','36768 Northfield Plaza','Fangshan','2017-1-26');
 ```
-#### Drop Objects
+
 In the command displayed, `insert` is used to add two new employees to the `emp_basic` table.
 
 ![Snowflake_INSERT_image](assets/Snowflake_INSERT.png)
 
+#### Drop Objects
 - [DROP​](https://docs.snowflake.com/en/sql-reference/sql/drop.html) objects no longer in use.
 
 ```
 drop database if exists sf_tuts;
-
 drop warehouse if exists sf_tuts_wh;
 ```
 
