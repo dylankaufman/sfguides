@@ -163,7 +163,7 @@ put file:///tmp/employees0*.csv @<database-name>.<schema-name>.%<table-name>;
 ```
 #### Windows
 ````console
-put file://c:\temp\employees0*.csv @sf_tuts.public.%emp_basic;
+put file://c:\temp\employees0*.csv @database-name>.<schema-name>.%<table-name>;
 ````
 
 - `file` specifies the *local* file path of the files to be staged. File paths are OS-specific.
