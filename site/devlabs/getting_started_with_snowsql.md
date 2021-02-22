@@ -95,13 +95,15 @@ the needed objects for cloud storage.
 snowsql -a <account-name> -u <username>
 ```
 
-The `-a` flag represents the Snowflake account, and the `-u` represents the username. Note that the account name can be found in the Organization tab, using either the account locator (for AWS installations) or the portion of the account locator URL or account URL between `https://` and `.snowflakecomputing.com` (for Azure & GCP).
+Negative: The `-a` flag represents the Snowflake account, and the `-u` represents the username. Note that the account name can be found in the Organization tab, using either the account locator (for AWS installations) or the portion of the account locator URL or account URL between `https://` and `.snowflakecomputing.com` (for Azure & GCP).
 
 ### Create a Database and Schema
 
 ```console
 create or replace database sf_tuts;
 ```
+
+Negative: A SQL command must be terminated with a semi-colon (;) to tell SnowSQL to exectue it.
 
 The command [​create or replace database​](https://docs.snowflake.com/en/sql-reference/sql/create-database.html) makes a new database and auto-creates the schema ‘public.’ It’ll also make the new database active for your current session.
 
