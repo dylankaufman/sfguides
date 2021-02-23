@@ -11,7 +11,7 @@ tags: Getting Started, AWS, SQL, Data Engineering, Snowpipe, auto-ingest
 ## Overview 
 Duration: 1
 
-When building data applications, your users count on seeing the latest. Stale data is less actionable and could lead to costly errors. That's why continuously generated data is essential. Snowflake provides a data loading tool to drive updates, ensuring your databases are accurate by updating tables in micro-batches.
+When building data applications, your users count on seeing the latest data. Stale data is less actionable and could lead to costly errors. That's why continuously generated data is essential. Snowflake provides a data loading tool to drive updates, ensuring your databases are accurate by updating tables in micro-batches.
 
 Let's look into how Snowpipe can be configured for continual loading. Then, we can review how you can efficiently perform basic management tasks. But first, If you’re unfamiliar with Snowflake or loading database objects, check out these resources to get familiar with the topics ahead.
 
@@ -133,7 +133,7 @@ CREATE OR REPLACE STORAGE INTEGRATION S3_role_integration
   STORAGE_PROVIDER = S3
   ENABLED = TRUE
   STORAGE_AWS_ROLE_ARN = "arn:aws:iam::<role_account_id>:role/snowflake_role"
-  STORAGE_ALLOWED_LOCATIONS = ("s3://<bucket>/<path>/”);
+  STORAGE_ALLOWED_LOCATIONS = ("s3://<bucket>/<prefix>/”);
 ```
 Be sure to change the `<bucket>`, `<prefix>` and `<role_account_id>` is replaced with *your* AWS S3 bucket name, folder path prefix, and IAM role account ID.
 
@@ -207,18 +207,18 @@ This command will make a table by the name of ‘S3_table’ on the S3_db databa
 ```sql
 use schema S3_db.public;
 create or replace stage S3_stage
-  url = ('s3://<bucket>/<path>/')
+  url = ('s3://<bucket>/<prefix>/')
   storage_integration = S3_role_integration;
 ```
 
-To make the external [stage](https://docs.snowflake.com/en/sql-reference/sql/create-stage.html) needed for our S3 bucket, use this command. Be mindful to replace the `<bucket>` and `<path>` with your S3 bucket name and file path.
+To make the external [stage](https://docs.snowflake.com/en/sql-reference/sql/create-stage.html) needed for our S3 bucket, use this command. Be mindful to replace the `<bucket>` and `<prefix>` with your S3 bucket name and file prefix (or path).
 
 ![Snowflake_CreateStage-image](assets/Snowflake_CreateStage.png)
 The figure above shows *Results* reading ‘Stage area S3_STAGE successfully created’.
 
 **Create Pipe**
 
-The magic of automation is in the [create pipe](https://docs.snowflake.com/en/sql-reference/sql/create-pipe.html) parameter, `auto_ingest=true`. With auto_ingest set to true, data stagged will automatically integrate into your database.
+The magic of automation is in the [create pipe](https://docs.snowflake.com/en/sql-reference/sql/create-pipe.html) parameter, `auto_ingest=true`. With auto_ingest set to true, data staged will be ingested into your database automatically.
 
 ```sql
 create or replace pipe S3_db.public.S3_pipe auto_ingest=true as
@@ -231,7 +231,7 @@ Confirm you receive a status message of, ‘Pipe S3_PIPE successfully created’
 
 2. Configure Snowpipe User Permissions
 
-To ensure the Snowflake user associated with executing the Snowpipe actions had sufficient permissions, create a unique role to manage Snowpipe security privileges. Do not employ the user account you're currently utilizing, instead create a new user to assign to Snowpipe within the web console.
+To ensure the Snowflake user associated with executing the Snowpipe actions has sufficient permissions, create a unique role to manage Snowpipe security privileges. Do not employ the user account you're currently utilizing, as this can be a security and maintenance risk; instead, create a new user to assign to Snowpipe within the web console.
 
 ```sql
 -- Create Role
@@ -277,6 +277,7 @@ Sign in to your AWS account and navigate to the S3 service console. Select the b
 - **SQS queue ARN:** <S3_pipe_ARN>
 
 ![Snowflake_AWSS3Notification-image](assets/Snowflake_AWSS3Notification.png)
+
 Snowpipe’s automated micro-batching is now active. Learn how to manage database integration in the next step.
 
 <!-- ------------------------ -->
@@ -298,7 +299,7 @@ Before making configuration changes with `ALTER PIPE`, stop the Snowpipe process
 - Check Snowpipe Status
   
 ```sql
-SYSTEM$PIPE_STATUS
+SELECT SYSTEM$PIPE_STATUS('<pipe name>')
 ```
 To check the status of the pipe, run the above command.
 
